@@ -1,0 +1,65 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
+package mejor_ajuste;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import javax.swing.JOptionPane;
+
+public class Mejor_Ajuste {
+
+    public static void main(String[] args) {
+        int Memoria = 2000;
+        boolean continuar = true;
+        int N;
+
+        List<Nproces> procesos = new ArrayList<>();
+        List<Nparticion> particiones = new ArrayList<>();
+
+        N = Integer.parseInt(JOptionPane.showInputDialog("digite el NUMERO de PARTICIONES que quiere hacer: "));
+
+        particiones.add(new Nparticion(0, 100));
+
+        int contador = 1;
+        for (int i = 1; i <= N; i++) {
+            int valor;
+
+            valor = Integer.parseInt(JOptionPane.showInputDialog("digite el TAMANIO de la particion: "));
+            particiones.add(new Nparticion(contador, valor));
+            ++contador;
+        }
+
+        procesos.add(new Nproces("JAVA", 200)); 
+        procesos.add(new Nproces("WORD", 700));        
+        procesos.add(new Nproces("PAINT", 1000));
+        procesos.add(new Nproces("S.O", 100));  
+
+        
+        Collections.sort(particiones, Comparator.comparingInt((Nparticion p) -> p.tamano).reversed());
+
+        for (int k = 0; k < procesos.size(); k++) {
+            Nproces Nproces = procesos.get(k);
+            boolean asignado = false;
+
+            for (int j = 0; j < particiones.size(); j++) {
+                Nparticion Nparticion = particiones.get(j);
+
+                if (!Nparticion.ocupada && Nparticion.tamano >= Nproces.tamano) {
+                    Nparticion.ocupada = true;
+                    Nparticion.nombreNproces = Nproces.nombre;
+                    asignado = true;
+                    System.out.println(Nproces.nombre + "<-- asignado a la particion --> " + Nparticion.id);
+                    break;
+                }
+            }
+
+            if (!asignado) {
+                System.out.println(Nproces.nombre + " <-- no fue asignado a la memoria  ");
+            }
+        }
+    }
+}
